@@ -31,3 +31,10 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return "CSVitesse"
+
+# Endpoint pour lister les fichiers CSV disponibles
+@app.get("/csv/files")
+async def list_csv_files():
+    blob_csv_list = container_client_csv.list_blobs()
+    csv_files = [blob.name for blob in blob_csv_list if blob.name.endswith('.csv')]
+    return JSONResponse(content=csv_files)
