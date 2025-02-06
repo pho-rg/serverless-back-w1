@@ -70,3 +70,21 @@ async def delete_csv(filename: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+# Endpoint pour uploader un fichier CSV
+@app.post("/csv/upload")
+async def upload_csv(file: UploadFile = File(...)):
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="Seuls les fichiers CSV sont autorisés")
+    
+    try:
+        blob_client = container_client_csv.get_blob_client(file.filename)
+        
+        # Lire et uploader en flux (streaming)
+        with file.file as file_stream:
+            blob_client.upload_blob(file_stream, overwrite=True)
+
+        return {"message": f"Fichier {file.filename} téléversé avec succès"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
