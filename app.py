@@ -55,3 +55,16 @@ async def get_json_file(filename: str):
         return JSONResponse(content=json.loads(json_data))
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+# Endpoint pour supprimer un fichier CSV
+@app.delete("/csv/delete/{filename}")
+async def delete_csv(filename: str):
+    try:
+        blob_client = container_client_csv.get_blob_client(filename)
+        if not blob_client.exists():
+            raise HTTPException(status_code=404, detail=f"Fichier {filename} introuvable")
+        
+        blob_client.delete_blob()
+        return {"message": f"Fichier {filename} supprimé avec succès"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
