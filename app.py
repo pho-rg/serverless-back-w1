@@ -45,3 +45,13 @@ async def list_json_files():
     blob_list = container_client.list_blobs()
     json_files = [blob.name for blob in blob_list if blob.name.endswith('.json')]
     return JSONResponse(content=json_files)
+
+# Endpoint pour récupérer le contenu d'un fichier JSON
+@app.get("/file/{filename}")
+async def get_json_file(filename: str):
+    try:
+        blob_client = container_client.get_blob_client(filename)
+        json_data = blob_client.download_blob().readall()
+        return JSONResponse(content=json.loads(json_data))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
