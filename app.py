@@ -38,3 +38,10 @@ async def list_csv_files():
     blob_csv_list = container_client_csv.list_blobs()
     csv_files = [blob.name for blob in blob_csv_list if blob.name.endswith('.csv')]
     return JSONResponse(content=csv_files)
+
+# Endpoint pour lister les fichiers JSON disponibles
+@app.get("/files")
+async def list_json_files():
+    blob_list = container_client.list_blobs()
+    json_files = [blob.name for blob in blob_list if blob.name.endswith('.json')]
+    return JSONResponse(content=json_files)
