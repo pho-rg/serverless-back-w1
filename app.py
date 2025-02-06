@@ -11,6 +11,10 @@ AZURE_STORAGE_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=st
 CONTAINER_CSV = "csv-uploads"
 CONTAINER_JSON = "json-report"
 
+blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_CONNECTION_STRING)
+container_client = blob_service_client.get_container_client(CONTAINER_JSON)
+container_client_csv = blob_service_client.get_container_client(CONTAINER_CSV)
+
 # Initialiser l'application FastAPI
 app = FastAPI()
 
