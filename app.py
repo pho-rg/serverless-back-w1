@@ -14,6 +14,9 @@ AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
 CONTAINER_CSV = os.getenv("CONTAINER_CSV")
 CONTAINER_JSON = os.getenv("CONTAINER_JSON")
 
+if not AZURE_STORAGE_CONNECTION_STRING or not CONTAINER_CSV or not CONTAINER_JSON:
+    raise RuntimeError("Les variables d'environnement Azure ne sont pas définies !")
+
 blob_service_client = BlobServiceClient.from_connection_string(AZURE_STORAGE_CONNECTION_STRING)
 container_client = blob_service_client.get_container_client(CONTAINER_JSON)
 container_client_csv = blob_service_client.get_container_client(CONTAINER_CSV)
